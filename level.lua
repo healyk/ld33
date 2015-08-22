@@ -4,7 +4,7 @@ Level.__index = Level
 LEVEL_WIDTH = 100
 LEVEL_HEIGHT = 100
 
-function randomTile()
+function randomTile(rng)
   number = rng:random(2)
   
   if number == 1 then
@@ -14,7 +14,7 @@ function randomTile()
   end
 end
 
-function Level.create(width, height)
+function Level.create(rng, width, height)
   local self = setmetatable({}, Level)
   
   self.width = width
@@ -24,7 +24,7 @@ function Level.create(width, height)
   for x = 0, self.width do
     self.tiles[x] = {}
     for y = 0, self.height do
-      self.tiles[x][y] = randomTile()
+      self.tiles[x][y] = randomTile(rng)
     end
   end
   
@@ -47,12 +47,12 @@ function Level:render(camera)
 
   for y = -10, 100 do
     for x = -10, 100 do
-      local pixelX = (x * TILE_WIDTH * SCALE_X) + camera.x
-      local pixelY = (y * TILE_HEIGHT) + camera.y
+      local pixelX = (x * TILE_WIDTH) - (camera.x % TILE_WIDTH)
+      local pixelY = (y * TILE_HEIGHT) - (camera.y % TILE_HEIGHT)
       local name = self:getTileName(x + cameraTileX, y + cameraTileY)
       
       if (cameraTileY + y) % 2 == 0 then
-        pixelX = pixelX + ((TILE_WIDTH / 2) * SCALE_X)
+        pixelX = pixelX + (TILE_WIDTH / 2)
       end
 
       gfx.drawTile(gfx.tiles[name], pixelX, pixelY)

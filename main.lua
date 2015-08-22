@@ -1,22 +1,20 @@
 require('gfx')
 require('level')
 require('camera')
+require('player')
+require('game')
 
-rng = nil
-level = nil
-camera = nil
+game = nil
 
 function love.load()
   gfx.init()
-  
-  rng = love.math.newRandomGenerator()
-  level = Level.create(100, 100)
-  camera = Camera.create()
+  game = Game.create()
 end
 
 function checkJoystickInput()
   local joysticks = love.joystick.getJoysticks()
   local joystick = joysticks[1]
+  
   local deltaX = 0
   local deltaY = 0
 
@@ -33,13 +31,18 @@ function checkJoystickInput()
     deltaX = -1
   end
   
-  camera:moveBy(deltaX, deltaY)
+  if deltaX ~= 0 or deltaY ~= 0 then
+    game:moveBy(deltaX, deltaY)
+  end
 end
+
+dtotal = 0
 
 function love.update(dt)
   checkJoystickInput()
 end
 
 function love.draw()
-  level:render(camera)
+  game.level:render(game.camera)
+  game.player:render(game.camera)
 end

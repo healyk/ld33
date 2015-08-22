@@ -16,9 +16,19 @@ function Camera:moveBy(deltaX, deltaY)
 end
 
 function Camera:getTileX()
-  return self.x
+  return math.floor(self.x / TILE_WIDTH)
 end
 
 function Camera:getTileY()
-  return self.y
+  return math.floor(self.y / TILE_HEIGHT)
+end
+
+function Camera:pixelToTiles(x, y)
+  return math.floor(x / TILE_WIDTH), math.floor(y / TILE_HEIGHT)
+end
+
+function Camera:setCenter(x, y)
+  local width, height, fullscreen, vsync, fsaa = love.window.getMode()
+  
+  self.x, self.y = math.floor(x - (width / 2 / SCALE_X)), math.floor(y - (height / 2 / SCALE_Y))
 end
