@@ -66,7 +66,7 @@ end
 -- be returned
 function Level:getTileName(x, y)
   if not self:inBounds(x, y) then
-    return "deepWater"
+    return 'deepWater'
   else
     return self.tiles[x][y]
   end
