@@ -3,11 +3,13 @@ require('level')
 require('camera')
 require('player')
 require('game')
+require('ui')
 
 game = nil
 
 function love.load()
   gfx.init()
+  ui.init()
   game = Game.create()
 end
 
@@ -78,4 +80,5 @@ end
 function love.draw()
   game.level:render(game.camera)
   game.player:render(game.camera)
+  ui.render(game)
 end
