@@ -16,10 +16,10 @@ function Player.create(x, y)
   
   self.image = gfx.tilesImage
   self.anims = {
-    west = Animation.create(self.image, 0.1), --love.graphics.newQuad(1, 19, PLAYER_WIDTH, PLAYER_HEIGHT, self.image:getWidth(), self.image:getHeight()),
-    east = Animation.create(self.image, 0.1), --love.graphics.newQuad(1, 37, PLAYER_WIDTH, PLAYER_HEIGHT, self.image:getWidth(), self.image:getHeight()),
-    south = Animation.create(self.image, 0.1), --love.graphics.newQuad(37, 19, PLAYER_HEIGHT, PLAYER_WIDTH, self.image:getWidth(), self.image:getHeight()),
-    north = Animation.create(self.image, 0.1), --love.graphics.newQuad(55, 19, PLAYER_HEIGHT, PLAYER_WIDTH, self.image:getWidth(), self.image:getHeight())
+    west = Animation.create(self.image, 0.1),
+    east = Animation.create(self.image, 0.1),
+    south = Animation.create(self.image, 0.1),
+    north = Animation.create(self.image, 0.1),
   }
   
   self.anims.west:addFrame(1, 19, PLAYER_WIDTH, PLAYER_HEIGHT)
