@@ -5,7 +5,7 @@ function Player.create(x, y)
   local self = setmetatable({}, Player)
   
   self.image = gfx.tilesImage
-  self.quad = love.graphics.newQuad(1, 19, TILE_WIDTH, TILE_HEIGHT, self.image:getWidth(), self.image:getHeight())
+  self.quad = love.graphics.newQuad(1, 19, 34, 16, self.image:getWidth(), self.image:getHeight())
   
   self.x = x
   self.y = y

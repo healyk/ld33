@@ -5,12 +5,14 @@ LEVEL_WIDTH = 100
 LEVEL_HEIGHT = 100
 
 function randomTile(rng)
-  number = rng:random(2)
+  number = rng:random(3)
   
   if number == 1 then
     return "grass"
   elseif number == 2 then
     return "shallowWater"
+  elseif number == 3 then
+    return "road"
   end
 end
 
@@ -47,7 +49,7 @@ function Level:render(camera)
 
   for y = -10, 100 do
     for x = -10, 100 do
-      local pixelX = (x * TILE_WIDTH) - (camera.x % TILE_WIDTH)
+      local pixelX = (x * TILE_WIDTH) - (camera.x % TILE_WIDTH) - 2
       local pixelY = (y * TILE_HEIGHT) - (camera.y % TILE_HEIGHT)
       local name = self:getTileName(x + cameraTileX, y + cameraTileY)
       
@@ -55,6 +57,10 @@ function Level:render(camera)
         pixelX = pixelX + (TILE_WIDTH / 2)
       end
 
+      if x == 3 and y == 3 then
+        print("pos " .. pixelX .. ", " .. pixelY)
+      end
+      
       gfx.drawTile(gfx.tiles[name], pixelX, pixelY)
     end
   end

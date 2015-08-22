@@ -5,7 +5,7 @@ SCALE_X = 2
 SCALE_Y = 2
 
 -- Raw pixel sizes for tiles (non-scaled)
-TILE_WIDTH = 34
+TILE_WIDTH = 16
 TILE_HEIGHT = 16
 
 function gfx.init()
@@ -15,8 +15,9 @@ function gfx.init()
   gfx.tilesImage = love.graphics.newImage('tiles.png')
   
   gfx.addTile("grass", 1, 1)
-  gfx.addTile("shallowWater", 3 + TILE_WIDTH, 1)
-  gfx.addTile("deepWater", 5 + (TILE_WIDTH * 2), 1)
+  gfx.addTile("shallowWater", 19, 1)
+  gfx.addTile("deepWater", 37, 1)
+  gfx.addTile("road", 55, 1)
 end
 
 function gfx.addTile(name, x, y)
