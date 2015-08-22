@@ -4,17 +4,34 @@ Level.__index = Level
 LEVEL_WIDTH = 100
 LEVEL_HEIGHT = 100
 
-function randomTile(rng)
-  number = rng:random(4)
+function Level:shoreTile(value, x, y)
+  -- Figure out if x or y is nearest to shore
+  local mod = 0
+  if x < 10 then
+    mod = 10 - x
+  elseif x > self.width - 10 then
+    mod = 10 - (self.width - x)
+    greater = true
+  elseif y < 10 then
+    mod = 10 - y
+  else
+    mod = 10 - (self.height - y)
+  end
   
-  if number == 1 then
-    return "grass"
-  elseif number == 2 then
-    return "shallowWater"
-  elseif number == 3 then
-    return "road"
-  elseif number == 4 then
-    return "dirt"
+  mod = mod / 10
+  
+  if value - mod <= 0.25 then
+    return 'shallowWater'
+  else
+    return 'sand'
+  end
+end
+
+function landTile(value)
+  if value <= 0.30 then
+    return 'dirt'
+  else
+    return 'grass'
   end
 end
 
@@ -28,7 +45,13 @@ function Level.create(rng, width, height)
   for x = 0, self.width do
     self.tiles[x] = {}
     for y = 0, self.height do
-      self.tiles[x][y] = randomTile(rng)
+      value = love.math.noise(x, y)
+
+      if x < 10 or y < 10 or x > (width - 10) or y > (height - 10) then
+        self.tiles[x][y] = self:shoreTile(value, x, y)
+      else
+        self.tiles[x][y] = landTile(value)
+      end
     end
   end
   
@@ -73,9 +96,15 @@ function Level:render(camera)
 end
 
 function Level:destroyTile(x, y)
-  if self:inBounds(x, y) and self.tiles[x][y] ~= "destroyed" then
-    self.tiles[x][y] = "destroyed"
-    return true
+  if self:inBounds(x, y) then
+    tile = self.tiles[x][y]
+
+     if tile ~= "destroyed" and tile ~= 'shallowWater' and tile ~= 'deepWater' then
+      self.tiles[x][y] = "destroyed"
+      return true
+    else
+      return false
+    end
   else
     return false
   end

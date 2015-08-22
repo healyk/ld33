@@ -20,6 +20,7 @@ function gfx.init()
   gfx.addTile("road", 55, 1)
   gfx.addTile("dirt", 73, 1)
   gfx.addTile("destroyed", 91, 1)
+  gfx.addTile("sand", 109, 1)
 end
 
 function gfx.addTile(name, x, y)
