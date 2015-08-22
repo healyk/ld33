@@ -32,3 +32,8 @@ function Camera:setCenter(x, y)
   
   self.x, self.y = math.floor(x - (width / 2 / SCALE_X)), math.floor(y - (height / 2 / SCALE_Y))
 end
+
+function Camera:getScreenTileResolution()
+  local width, height, fullscreen, vsync, fsaa = love.window.getMode()
+  return width / TILE_WIDTH, height / TILE_HEIGHT
+end

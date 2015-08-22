@@ -18,8 +18,25 @@ end
 function Game:moveBy(x, y)
   self.camera:moveBy(x, y)
   self.player:moveBy(x, y)
+end
+
+function Game:calculatePlayerTouchTiles()
+  local bounds = self.player:getBounds()
   
-  print('move')
-  print(self.player.x)
-  print(self.player.y)
+  local left = bounds.x - (bounds.x % TILE_WIDTH)
+  local right = bounds.x + bounds.width
+  right = right + (right % TILE_WIDTH)
+
+  local top = bounds.y - (bounds.y % TILE_HEIGHT)
+  local bottom = bounds.y + bounds.height
+  bottom = bottom + (bottom % TILE_HEIGHT)
+  
+  results = {}
+  for x = left, right, TILE_WIDTH do
+    for y = top, bottom, TILE_HEIGHT do
+      table.insert(results, { x / TILE_WIDTH, y / TILE_HEIGHT })
+    end
+  end
+  
+  return results
 end

@@ -1,11 +1,14 @@
 Player = Player or {}
 Player.__index = Player
 
+PLAYER_WIDTH = 34
+PLAYER_HEIGHT = 16
+
 function Player.create(x, y)
   local self = setmetatable({}, Player)
   
   self.image = gfx.tilesImage
-  self.quad = love.graphics.newQuad(1, 19, 34, 16, self.image:getWidth(), self.image:getHeight())
+  self.quad = love.graphics.newQuad(1, 19, PLAYER_WIDTH, PLAYER_HEIGHT, self.image:getWidth(), self.image:getHeight())
   
   self.x = x
   self.y = y
@@ -23,4 +26,13 @@ end
 function Player:moveBy(x, y)
   self.x = self.x + x
   self.y = self.y + y
+end
+
+function Player:getBounds()
+  return {
+    x = self.x,
+    y = self.y,
+    width = PLAYER_WIDTH,
+    height = PLAYER_HEIGHT
+  }
 end
