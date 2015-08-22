@@ -16,21 +16,29 @@ function Camera:moveBy(deltaX, deltaY)
 end
 
 function Camera:getTileX()
-  return math.floor(self.x / TILE_WIDTH)
+  local x, y = self:pixelToTiles(self.x, self.y)
+  return x
 end
 
 function Camera:getTileY()
-  return math.floor(self.y / TILE_HEIGHT)
+  local x, y = self:pixelToTiles(self.x, self.y)
+  return y
 end
 
 function Camera:pixelToTiles(x, y)
-  return math.floor(x / TILE_WIDTH), math.floor(y / TILE_HEIGHT)
+  local tileX, tileY = math.floor(x / TILE_WIDTH), math.floor(y / TILE_HEIGHT)
+  
+  return tileX, tileY
 end
 
 function Camera:setCenter(x, y)
   local width, height, fullscreen, vsync, fsaa = love.window.getMode()
   
-  self.x, self.y = math.floor(x - (width / 2 / SCALE_X)), math.floor(y - (height / 2 / SCALE_Y))
+  width = width / SCALE_X
+  height = height / SCALE_Y
+  
+  self.x = math.floor(x - (width / 2))
+  self.y = math.floor(y - (height / 2))
 end
 
 function Camera:getScreenTileResolution()

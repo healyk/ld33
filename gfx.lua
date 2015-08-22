@@ -34,5 +34,5 @@ function gfx.addTile(name, x, y)
 end
 
 function gfx.drawTile(tile, x, y)
-  love.graphics.draw(tile.image, tile.quad, x * SCALE_X, y, 0, SCALE_X, SCALE_Y, 0, 0)
+  love.graphics.draw(tile.image, tile.quad, x * SCALE_X, y * SCALE_Y, 0, SCALE_X, SCALE_Y, 0, 0)
 end

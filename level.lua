@@ -50,12 +50,15 @@ function Level:getTileName(x, y)
 end
 
 function Level:render(camera)
-  local width, height = camera:getScreenTileResolution()
   local cameraTileX = camera:getTileX()
   local cameraTileY = camera:getTileY()
+  
+  -- pad y
+  local width, height = camera:getScreenTileResolution()
+  cameraTileY = cameraTileY - math.floor(width / 4)
 
-  for y = -10, 100 do
-    for x = -10, 100 do
+  for y = -10, self.height do
+    for x = -10, self.width do
       local pixelX = (x * TILE_WIDTH) - (camera.x % TILE_WIDTH)
       local pixelY = (y * TILE_HEIGHT) - (camera.y % TILE_HEIGHT)
       local name = self:getTileName(x + cameraTileX, y + cameraTileY)
@@ -64,13 +67,16 @@ function Level:render(camera)
         pixelX = pixelX + (TILE_WIDTH / 2)
       end
       
-      gfx.drawTile(gfx.tiles[name], pixelX, pixelY)
+      gfx.drawTile(gfx.tiles[name], pixelX, pixelY / 2)
     end
   end
 end
 
 function Level:destroyTile(x, y)
-  if self:inBounds(x, y) then
+  if self:inBounds(x, y) and self.tiles[x][y] ~= "destroyed" then
     self.tiles[x][y] = "destroyed"
+    return true
+  else
+    return false
   end
 end

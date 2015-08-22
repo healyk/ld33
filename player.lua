@@ -17,10 +17,10 @@ function Player.create(x, y)
 end
 
 function Player:render(camera) 
-  local pixelX = (self.x - camera.x) * SCALE_X
-  local pixelY = (self.y - camera.y) * SCALE_Y
+  local pixelX = self.x - camera.x
+  local pixelY = self.y - camera.y + TILE_HEIGHT
  
-  love.graphics.draw(self.image, self.quad, pixelX, pixelY, 0, SCALE_X, SCALE_Y)
+  love.graphics.draw(self.image, self.quad, pixelX * SCALE_X, pixelY * SCALE_Y, 0, SCALE_X, SCALE_Y)
 end
 
 function Player:moveBy(x, y)
@@ -32,7 +32,7 @@ function Player:getBounds()
   return {
     x = self.x,
     y = self.y,
-    width = PLAYER_WIDTH,
-    height = PLAYER_HEIGHT
+    width = 16,
+    height = 8
   }
 end

@@ -12,12 +12,14 @@ function Game.create()
   self.player = Player.create(5, 5)
   self.camera:setCenter(5, 5)
   
+  self.score = 0
+  
   return self
 end
 
 function Game:moveBy(x, y)
-  self.camera:moveBy(x, y)
   self.player:moveBy(x, y)
+  self.camera:setCenter(self.player.x, self.player.y)
 end
 
 function Game:calculatePlayerTouchTiles()
@@ -39,4 +41,19 @@ function Game:calculatePlayerTouchTiles()
   end
   
   return results
+end
+
+function Game:updateScore()
+  local tiles = game:calculatePlayerTouchTiles()
+  local oldScore = self.score
+  
+  for k, v in pairs(tiles) do
+    if game.level:destroyTile(v[1], v[2]) then
+      self.score = self.score + 1
+    end
+  end
+  
+  if oldScore ~= self.score then
+    print("New score: " .. self.score)
+  end
 end

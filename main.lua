@@ -12,10 +12,10 @@ function love.load()
 end
 
 KEY_MAPPINGS = {
-  { { joy = 'dpup', key = 'up' },      { 'move', 0, -1 } },
-  { { joy = 'dpdown', key = 'down' },  { 'move', 0, 1 } },
-  { { joy = 'dpleft', key = 'left' },  { 'move', -1, 0 } },
-  { { joy = 'dpright', key = 'right' }, { 'move', 1, 0 } }
+  { { joy = 'dpup', key = 'up' },      { 'move', 0, -3 } },
+  { { joy = 'dpdown', key = 'down' },  { 'move', 0, 3 } },
+  { { joy = 'dpleft', key = 'left' },  { 'move', -3, 0 } },
+  { { joy = 'dpright', key = 'right' }, { 'move', 3, 0 } }
 }
 
 function checkJoystickInput()
@@ -72,10 +72,7 @@ function love.update(dt)
   checkJoystickInput()
   checkKeyboardInput()
   
-  tiles = game:calculatePlayerTouchTiles()
-  for k, v in pairs(tiles) do
-    game.level:destroyTile(v[1], v[2])
-  end
+  game:updateScore()
 end
 
 function love.draw()
