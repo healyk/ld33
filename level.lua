@@ -42,13 +42,16 @@ function Level:getTileName(x, y)
 end
 
 function Level:render(camera)
-  for y = -1, 100 do
-    for x = -1, 100 do
+  local cameraTileX = camera:getTileX()
+  local cameraTileY = camera:getTileY()
+
+  for y = -10, 100 do
+    for x = -10, 100 do
       local pixelX = (x * TILE_WIDTH * SCALE_X) + camera.x
       local pixelY = (y * TILE_HEIGHT) + camera.y
-      local name = self:getTileName(x + camera:getTileX(), y + camera:getTileY())
+      local name = self:getTileName(x + cameraTileX, y + cameraTileY)
       
-      if (camera:getTileY() + y) % 2 == 0 then
+      if (cameraTileY + y) % 2 == 0 then
         pixelX = pixelX + ((TILE_WIDTH / 2) * SCALE_X)
       end
 

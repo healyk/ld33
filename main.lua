@@ -14,12 +14,30 @@ function love.load()
   camera = Camera.create()
 end
 
-function love.gamepadpressed(joystick, button)
-  if button == "dpup" then
-    camera:moveBy(0, -1)
-  elseif button == "dpdown" then 
-    camera:moveBy(0, 1)
+function checkJoystickInput()
+  local joysticks = love.joystick.getJoysticks()
+  local joystick = joysticks[1]
+  local deltaX = 0
+  local deltaY = 0
+
+  if joystick:isGamepadDown("dpup") then
+    deltaY = -1
   end
+  if joystick:isGamepadDown("dpdown") then 
+    deltaY = 1
+  end
+  if joystick:isGamepadDown("dpright") then
+    deltaX = 1
+  end
+  if joystick:isGamepadDown("dpleft") then
+    deltaX = -1
+  end
+  
+  camera:moveBy(deltaX, deltaY)
+end
+
+function love.update(dt)
+  checkJoystickInput()
 end
 
 function love.draw()
