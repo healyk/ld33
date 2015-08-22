@@ -37,3 +37,44 @@ end
 function gfx.drawTile(tile, x, y)
   love.graphics.draw(tile.image, tile.quad, x * SCALE_X, y * SCALE_Y, 0, SCALE_X, SCALE_Y, 0, 0)
 end
+
+--
+-- Animation
+--
+Animation = Animation or {}
+Animation.__index = Animation
+
+function Animation.create(image, frameTime)
+  local self = setmetatable({}, Animation)
+  
+  self.frames = {}
+  self.current = 1
+  self.frameTime = frameTime
+  self.currentTime = 0
+  self.image = image
+  
+  return self
+end
+
+function Animation:update(dt)
+  self.currentTime = self.currentTime + dt
+
+  if self.currentTime > self.frameTime then
+    self.currentTime = 0
+
+    self.current = self.current + 1
+    if self.current > #self.frames then
+      self.current = 1
+    end
+  end
+end
+
+function Animation:render(x, y)
+  local quad = self.frames[self.current]
+  love.graphics.draw(self.image, quad, x * SCALE_X, y * SCALE_Y, 0, SCALE_X, SCALE_Y)
+end
+
+function Animation:addFrame(x, y, width, height)
+  local quad = love.graphics.newQuad(x, y, width, height, self.image:getWidth(), self.image:getHeight())
+  table.insert(self.frames, quad)
+end

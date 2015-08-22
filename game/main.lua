@@ -72,7 +72,7 @@ function love.update(dt)
   checkJoystickInput()
   checkKeyboardInput()
   
-  game:updateScore()
+  game:update(dt)
 end
 
 function love.draw()

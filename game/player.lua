@@ -15,12 +15,24 @@ function Player.create(x, y)
   local self = setmetatable({}, Player)
   
   self.image = gfx.tilesImage
-  self.quads = {
-    west = love.graphics.newQuad(1, 19, PLAYER_WIDTH, PLAYER_HEIGHT, self.image:getWidth(), self.image:getHeight()),
-    east = love.graphics.newQuad(1, 37, PLAYER_WIDTH, PLAYER_HEIGHT, self.image:getWidth(), self.image:getHeight()),
-    south = love.graphics.newQuad(37, 19, PLAYER_HEIGHT, PLAYER_WIDTH, self.image:getWidth(), self.image:getHeight()),
-    north = love.graphics.newQuad(55, 19, PLAYER_HEIGHT, PLAYER_WIDTH, self.image:getWidth(), self.image:getHeight())
+  self.anims = {
+    west = Animation.create(self.image, 0.1), --love.graphics.newQuad(1, 19, PLAYER_WIDTH, PLAYER_HEIGHT, self.image:getWidth(), self.image:getHeight()),
+    east = Animation.create(self.image, 0.1), --love.graphics.newQuad(1, 37, PLAYER_WIDTH, PLAYER_HEIGHT, self.image:getWidth(), self.image:getHeight()),
+    south = Animation.create(self.image, 0.1), --love.graphics.newQuad(37, 19, PLAYER_HEIGHT, PLAYER_WIDTH, self.image:getWidth(), self.image:getHeight()),
+    north = Animation.create(self.image, 0.1), --love.graphics.newQuad(55, 19, PLAYER_HEIGHT, PLAYER_WIDTH, self.image:getWidth(), self.image:getHeight())
   }
+  
+  self.anims.west:addFrame(1, 19, PLAYER_WIDTH, PLAYER_HEIGHT)
+  self.anims.west:addFrame(73, 19, PLAYER_WIDTH, PLAYER_HEIGHT)
+  
+  self.anims.east:addFrame(1, 37, PLAYER_WIDTH, PLAYER_HEIGHT)
+  self.anims.east:addFrame(73, 37, PLAYER_WIDTH, PLAYER_HEIGHT)
+  
+  self.anims.south:addFrame(37, 19, PLAYER_HEIGHT, PLAYER_WIDTH)
+  self.anims.south:addFrame(109, 19, PLAYER_HEIGHT, PLAYER_WIDTH)
+  
+  self.anims.north:addFrame(55, 19, PLAYER_HEIGHT, PLAYER_WIDTH)
+  self.anims.north:addFrame(127, 19, PLAYER_HEIGHT, PLAYER_WIDTH)
   
   self.x = x
   self.y = y
@@ -33,8 +45,8 @@ function Player:render(camera)
   local pixelX = self.x - camera.x
   local pixelY = self.y - camera.y + TILE_HEIGHT
  
-  local quad = self.quads[self.facing]
-  love.graphics.draw(self.image, quad, pixelX * SCALE_X, pixelY * SCALE_Y, 0, SCALE_X, SCALE_Y)
+  local anim = self.anims[self.facing]
+  anim:render(pixelX, pixelY)
 end
 
 function Player:moveBy(x, y)
@@ -55,6 +67,11 @@ function Player:moveBy(x, y)
   elseif y > 0 then
     self.facing = 'north'
   end
+end
+
+function Player:update(dt)
+  local anim = self.anims[self.facing]
+  anim:update(dt)
 end
 
 function Player:getBounds()

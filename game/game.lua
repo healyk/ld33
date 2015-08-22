@@ -57,3 +57,8 @@ function Game:updateScore()
     print("New score: " .. self.score)
   end
 end
+
+function Game:update(dt)
+  self.player:update(dt)
+  self:updateScore()
+end
