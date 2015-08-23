@@ -6,7 +6,7 @@ require('player')
 require('game')
 require('ui')
 
-debugmode = true
+debugmode = false
 game = nil
 
 function love.load()

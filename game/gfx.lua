@@ -19,7 +19,7 @@ function gfx.init()
   gfx.addTile('deepWater', 37, 1)
   gfx.addTile('road', 55, 1)
   gfx.addTile('dirt', 73, 1)
-  gfx.addTile('destroyed', 91, 1)
+  gfx.addTile('forrest', 91, 1)
   gfx.addTile('sand', 109, 1)
   gfx.addTile('destroyedBuilding', 127, 1)
 end

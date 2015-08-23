@@ -39,6 +39,7 @@ end
 function Building:damage()
   if self.health > 0 then
     self.health = self.health - 1
+    local currentState = self.currentState
     
     if self.health <= 10 then
       self.currentState = BUILDING_DESTROYED
@@ -50,8 +51,13 @@ function Building:damage()
       self.currentState = BUILDING_OKAY
     end
     
-    return false
+    local score = 1
+    if currentState ~= self.currentState then
+      score = 100
+    end
+    
+    return false, score
   else
-    return true
+    return true, 0
   end
 end

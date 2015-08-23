@@ -94,13 +94,14 @@ function Level:destroyTile(x, y)
     tile = self.tiles[x][y]
     
     if tile.building ~= nil then
-      if tile.building:damage() then
+      local damage, score = tile.building:damage()
+      if damage then
         tile.building = nil
       end
       
-      return 10, true
-    elseif tileDestroyable(tile.name) then
-      tile.name = "destroyed"
+      return score, true
+    elseif tile.name == 'grass' or tile.name == 'sand' or tile.name == 'forrest' then
+      tile.name = 'dirt'
       return 1, false
     else
       return 0, tileSlows(tile.name)
@@ -111,7 +112,7 @@ function Level:destroyTile(x, y)
 end
 
 function tileDestroyable(name)
-  return name ~= 'destroyed' and name ~= 'shallowWater' and name ~= 'deepWater' and name ~= 'destroyedBuilding' and
+  return name ~= 'shallowWater' and name ~= 'deepWater' and name ~= 'destroyedBuilding' and
     name ~= 'road'
 end
 
@@ -178,7 +179,7 @@ end
 function landTile(value)
   if value <= 0.30 then
     return {
-      name = 'dirt'
+      name = 'forrest'
     }
   else
     return {
@@ -192,7 +193,7 @@ function Level:genCity(self, rng, x, y)
     for cityY = 0, 4 do
       local currentName = self.tiles[x + cityX][x + cityY].name
       
-      if currentName == 'grass' or currentName == 'dirt' then
+      if currentName == 'grass' or currentName == 'forrest' then
         if cityX == 0 or cityY == 0 or cityX == 4 or cityY == 4 then
           self.tiles[x + cityX][y + cityY].name = 'road'
         else
