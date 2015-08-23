@@ -6,8 +6,11 @@ require('player')
 require('game')
 require('ui')
 
-debugmode = false
+GAMESTATE_INGAME = 0
+GAMESTATE_GAMEOVER = 1
+
 game = nil
+gamestate = GAMESTATE_INGAME
 
 function love.load()
   gfx.init()
@@ -74,10 +77,16 @@ function checkKeyboardInput()
 end
 
 function love.update(dt)
-  checkJoystickInput()
-  checkKeyboardInput()
-  
-  game:update(dt)
+  if gamestate == GAMESTATE_INGAME then
+    checkJoystickInput()
+    checkKeyboardInput()
+    
+    game:update(dt)
+    
+    if game:over() then
+      gamestate = GAMESTATE_GAMEOVER
+    end
+  end
 end
 
 function love.draw()
@@ -86,13 +95,19 @@ function love.draw()
   
   ui.render(game)
   
-  if debugmode then
-    local bounds = game.player:getBounds()
-    local pixelX = (bounds.x - (bounds.x % TILE_WIDTH)) - game.camera.x
-    local pixelY = (bounds.y - (bounds.y % TILE_HEIGHT)) - game.camera.y + TILE_HEIGHT
-    
-    love.graphics.setColor(255, 0, 0, 255)
-    love.graphics.rectangle("line", pixelX * SCALE_X, pixelY * SCALE_Y, bounds.width * SCALE_X, bounds.height * SCALE_Y)
-    love.graphics.setColor(255, 255, 255, 255)
+  if gamestate == GAMESTATE_GAMEOVER then
+    renderGameOver()
   end
+end
+
+function renderGameOver()
+  local width, height = love.window.getMode()
+    
+  width = (width / SCALE_X) - 200
+  height = (height / SCALE_Y) - 200
+  
+  ui.renderBox(100, 100, width, height)
+  
+  ui.drawString(250, 110, 'Game Over!')
+  ui.drawString(250, 130, 'Score: ' .. game.score)
 end

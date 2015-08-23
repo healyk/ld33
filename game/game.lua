@@ -21,6 +21,7 @@ function Game.create()
   
   self.score = 0
   self.damaging = false
+  self.timeLeft = 60
   
   return self
 end
@@ -70,4 +71,14 @@ end
 function Game:update(dt)
   self.player:update(dt)
   self:updateScore()
+  
+  self.timeLeft = self.timeLeft - dt
+  
+  if self.timeLeft < 0 then
+    self.timeLeft = 0
+  end
+end
+
+function Game:over()
+  return self.timeLeft <= 0
 end
