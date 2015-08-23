@@ -16,8 +16,8 @@ function Game.create()
   self.level = Level.create(self.rng, 100, 100)
   self.camera = Camera.create()
   
-  self.player = Player.create(5, 5)
-  self.camera:setCenter(5, 5)
+  self.player = Player.create(300, 300)
+  self.camera:setCenter(300, 300)
   
   self.score = 0
   self.damaging = false
@@ -58,7 +58,9 @@ function Game:updateScore()
     local oldScore = self.score
   
     for k, v in pairs(tiles) do
-      self.score = self.score + game.level:destroyTile(v[1], v[2])
+      local damageScore, slowed = game.level:destroyTile(v[1], v[2])
+      self.score = self.score + damageScore
+      self.player.slowed = slowed
     end
     
     self.damaging = false

@@ -37,6 +37,7 @@ function Player.create(x, y)
   self.x = x
   self.y = y
   self.facing = 'west'
+  self.slowed = false
   
   return self
 end
@@ -50,6 +51,11 @@ function Player:render(camera)
 end
 
 function Player:moveBy(x, y)
+  if self.slowed then
+    x = x / 4
+    y = y / 4
+  end
+
   self.x = self.x + x
   
   if x == 0 then
