@@ -4,6 +4,12 @@ Player.__index = Player
 PLAYER_WIDTH = 34
 PLAYER_HEIGHT = 16
 
+PLAYER_MOVE_SOUND = love.audio.newSource("ant-move.ogg", "static")
+PLAYER_MOVE_SOUND:setVolume(0.5)
+PLAYER_ROAR_SOUND = love.audio.newSource("ant-roar.ogg", "static")
+
+ROAR_COUNTER = 200
+
 PLAYER_SIZES = {
   west = { width = 34, height = 16 },
   east = { width = 34, height = 16 },
@@ -38,6 +44,7 @@ function Player.create(x, y)
   self.y = y
   self.facing = 'west'
   self.slowed = false
+  self.roarCounter = ROAR_COUNTER
   
   return self
 end
@@ -50,7 +57,9 @@ function Player:render(camera)
   anim:render(pixelX, pixelY)
 end
 
-function Player:moveBy(x, y)
+function Player:moveBy(game, x, y)
+  PLAYER_MOVE_SOUND:play()
+
   if self.slowed then
     x = x / 4
     y = y / 4
@@ -72,6 +81,12 @@ function Player:moveBy(x, y)
     self.facing = 'south'
   elseif y > 0 then
     self.facing = 'north'
+  end
+  
+  self.roarCounter = self.roarCounter - 1
+  if self.roarCounter <= 0 then
+    PLAYER_ROAR_SOUND:play()
+    self.roarCounter = ROAR_COUNTER + game.rng:random(50)
   end
 end
 

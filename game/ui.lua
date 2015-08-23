@@ -76,7 +76,9 @@ end
 --
 MainMenu = MainMenu or {
   selected = 1,
-  items = { "NEW GAME", "EXIT" }
+  items = { "PLAY GAME", "EXIT" },
+  soundChange = love.audio.newSource("menu-change.wav", "static"),
+  soundSelect = love.audio.newSource("menu-select.wav", "static")
 }
 
 NEW_GAME = 1
@@ -88,6 +90,7 @@ end
 
 function MainMenu.changeSelected(delta)
   MainMenu.selected = MainMenu.selected + delta
+  MainMenu.soundChange:play()
   
   if MainMenu.selected < 1 then
     MainMenu.selected = #MainMenu.items
@@ -100,6 +103,7 @@ function MainMenu.select()
   if MainMenu.selected == NEW_GAME then
     game = Game.create()
     gamestate = INGAME
+    MainMenu.soundSelect:play()
   elseif MainMenu.selected == EXIT then
     love.event.quit()
   end
@@ -123,7 +127,7 @@ end
 
 function MainMenu.gamepadInput(button)
   if button == 'dpdown' then
-     MainMenu.changeSelected(-1)
+    MainMenu.changeSelected(-1)
   elseif button == 'dpup' then
     MainMenu.changeSelected(1)
   else

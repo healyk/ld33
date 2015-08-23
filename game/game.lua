@@ -2,7 +2,7 @@ Game = Game or {}
 Game.__index = Game
 
 -- Game time in seconds
-GAME_TIME = 5
+GAME_TIME = 60
 
 -- Starts a new game
 function Game.create()
@@ -30,7 +30,7 @@ function Game.create()
 end
 
 function Game:moveBy(x, y)
-  self.player:moveBy(x, y)
+  self.player:moveBy(self, x, y)
   self.camera:setCenter(self.player.x, self.player.y)
   self.damaging = true
 end
@@ -38,13 +38,13 @@ end
 function Game:calculatePlayerTouchTiles()
   local bounds = self.player:getBounds()
   
-  local left = bounds.x -- (bounds.x % TILE_WIDTH)
+  local left = bounds.x - (bounds.x % TILE_WIDTH)
   local right = bounds.x + bounds.width
-  --right = right + (right % TILE_WIDTH)
+  right = right + (right % TILE_WIDTH)
 
-  local top = bounds.y -- (bounds.y % TILE_HEIGHT)
+  local top = bounds.y - (bounds.y % TILE_HEIGHT)
   local bottom = bounds.y + bounds.height
-  --bottom = bottom + (bottom % TILE_HEIGHT)
+  bottom = bottom + (bottom % TILE_HEIGHT)
   
   results = {}
   for x = left, right, TILE_WIDTH do
