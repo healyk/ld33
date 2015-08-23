@@ -25,15 +25,39 @@ function Level.create(rng, width, height)
     end
   end
   
-  -- Add some random buildings
+  -- Add some random cities
   for i = 0, 10 do
-    local x = rng:random(12, self.width - 10)
+    local x = rng:random(12, self.width - 12)
     local y = rng:random(12, self.height - 12)
     
     Level:genCity(self, rng, x, y)
   end
   
+  -- Add some houses
+  for i = 0, 25 do
+    Level:placeHouse(self, rng)
+  end
+  
   return self
+end
+
+function Level:placeHouse(self, rng)
+  local x = rng:random(12, self.width - 12)
+  local y = rng:random(12, self.height - 12)
+    
+  if self.tiles[x][y].name == 'grass' or self.tiles[x][y].name == 'forrest' then  
+    -- Add some random fields
+    for i = x - 1, x + 1 do
+      for j = y - 1, y + 1 do
+        if rng:random(2) == 1 then
+          self.tiles[i][j].name = 'field'
+        end
+      end
+    end
+  
+    self.tiles[x][y].building = House.create()
+    self.tiles[x][y].name = 'destroyedHouse'
+  end
 end
 
 function Level:inBounds(x, y)
@@ -100,7 +124,7 @@ function Level:destroyTile(x, y)
       end
       
       return score, true
-    elseif tile.name == 'grass' or tile.name == 'sand' or tile.name == 'forrest' then
+    elseif tileDestroyable(tile.name) then
       tile.name = 'dirt'
       return 1, false
     else
@@ -112,8 +136,7 @@ function Level:destroyTile(x, y)
 end
 
 function tileDestroyable(name)
-  return name ~= 'shallowWater' and name ~= 'deepWater' and name ~= 'destroyedBuilding' and
-    name ~= 'road'
+  return tile.name == 'grass' or tile.name == 'sand' or tile.name == 'forrest' or tile.name == 'field'
 end
 
 function tileSlows(name)
@@ -197,8 +220,8 @@ function Level:genCity(self, rng, x, y)
         if cityX == 0 or cityY == 0 or cityX == 4 or cityY == 4 then
           self.tiles[x + cityX][y + cityY].name = 'road'
         else
-          self.tiles[x + cityX][y + cityY].building = Building.create()
-          self.tiles[x + cityX][y + cityY].name = 'destroyedBuilding'
+          self.tiles[x + cityX][y + cityY].building = Skyscraper.create()
+          self.tiles[x + cityX][y + cityY].name = 'destroyedSkyscraper'
         end
       end
     end

@@ -21,7 +21,9 @@ function gfx.init()
   gfx.addTile('dirt', 73, 1)
   gfx.addTile('forrest', 91, 1)
   gfx.addTile('sand', 109, 1)
-  gfx.addTile('destroyedBuilding', 127, 1)
+  gfx.addTile('destroyedSkyscraper', 127, 1)
+  gfx.addTile('destroyedHouse', 145, 1)
+  gfx.addTile('field', 163, 1)
 end
 
 function gfx.addTile(name, x, y)
