@@ -20,6 +20,7 @@ function ui.init()
   ui.addChar(' ', 313, 1)
   ui.addChar(':', 1, 25)
   ui.addChar('!', 13, 25)
+  ui.addChar('>', 25, 25)
 end
 
 function ui.addChar(chr, x, y)
@@ -68,4 +69,83 @@ function ui.renderBox(x, y, width, height)
   love.graphics.setColor(ui.black)
   love.graphics.rectangle("fill", (x + 3) * SCALE_X, (y + 3) * SCALE_Y, (width - 6) * SCALE_X, (height - 6) * SCALE_Y)
   love.graphics.setColor(255, 255, 255)
+end
+
+--
+-- Main Menu
+--
+MainMenu = MainMenu or {
+  selected = 1,
+  items = { "NEW GAME", "EXIT" }
+}
+
+NEW_GAME = 1
+EXIT = 2
+
+function MainMenu.reset()
+  MainMenu.selected = 1
+end
+
+function MainMenu.changeSelected(delta)
+  MainMenu.selected = MainMenu.selected + delta
+  
+  if MainMenu.selected < 1 then
+    MainMenu.selected = #MainMenu.items
+  elseif MainMenu.selected > #MainMenu.items then
+    MainMenu.selected = 1
+  end
+end
+
+function MainMenu.select()
+  if MainMenu.selected == NEW_GAME then
+    game = Game.create()
+    gamestate = INGAME
+  elseif MainMenu.selected == EXIT then
+    love.event.quit()
+  end
+end
+
+function MainMenu.render()
+  local x = 100
+ 
+  for i = 1, #MainMenu.items do
+    local itemStr = MainMenu.items[i]
+    
+    if MainMenu.selected == i then
+      itemStr = "> " .. itemStr
+    else
+      itemStr = "  " .. itemStr
+    end
+  
+    ui.drawString(200, 130 + (i * 12), itemStr)
+  end
+end
+
+function MainMenu.gamepadInput(button)
+  if button == 'dpdown' then
+     MainMenu.changeSelected(-1)
+  elseif button == 'dpup' then
+    MainMenu.changeSelected(1)
+  else
+    for k, v in pairs({ 'a', 'b', 'x', 'y', 'back', 'guide', 'start' }) do
+      if button == v then
+        MainMenu.select()
+      end
+    end
+  end
+end
+
+function MainMenu.keyboardInput(button)
+  if button == 'down' then
+    MainMenu.changeSelected(-1)
+  elseif button == 'up' then
+    MainMenu.changeSelected(1)
+  elseif button == 'return' or button == ' ' or button == 'space' then
+    MainMenu.select()
+  end
+end
+
+function MainMenu.update()
+  MainMenu.checkJoystickInput()
+  MainMenu.checkKeyboardInput()
 end

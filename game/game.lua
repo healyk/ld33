@@ -1,6 +1,9 @@
 Game = Game or {}
 Game.__index = Game
 
+-- Game time in seconds
+GAME_TIME = 5
+
 -- Starts a new game
 function Game.create()
   local self = setmetatable({}, Game)
@@ -21,7 +24,7 @@ function Game.create()
   
   self.score = 0
   self.damaging = false
-  self.timeLeft = 60
+  self.timeLeft = GAME_TIME
   
   return self
 end

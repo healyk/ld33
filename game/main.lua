@@ -6,19 +6,23 @@ require('player')
 require('game')
 require('ui')
 
-GAMESTATE_INGAME = 0
-GAMESTATE_GAMEOVER = 1
+MAINMENU = 0
+INGAME = 1
+GAMEOVER = 2
 
 game = nil
-gamestate = GAMESTATE_INGAME
+gamestate = MAINMENU
+gameoverDelay = 0
 
 function love.load()
   gfx.init()
   ui.init()
   initBuildingGfx()
-  game = Game.create()
 end
 
+--
+-- Update
+--
 KEY_MAPPINGS = {
   { { joy = 'dpup', key = 'up' },      { 'move', 0, -3 } },
   { { joy = 'dpdown', key = 'down' },  { 'move', 0, 3 } },
@@ -53,7 +57,6 @@ function checkJoystickInput()
   end
 end
 
-
 function checkKeyboardInput() 
   local deltaX = 0
   local deltaY = 0
@@ -77,26 +80,62 @@ function checkKeyboardInput()
 end
 
 function love.update(dt)
-  if gamestate == GAMESTATE_INGAME then
+  if gamestate == INGAME then
     checkJoystickInput()
     checkKeyboardInput()
     
     game:update(dt)
     
     if game:over() then
-      gamestate = GAMESTATE_GAMEOVER
+      triggerGameOver()
+    end
+  end
+  
+  if gamestate == GAMEOVER then
+    if gameoverDelay > 0 then
+      gameoverDelay = gameoverDelay - dt
     end
   end
 end
 
+--
+-- Input
+--
+function love.gamepadpressed(joystick, button)
+  if gamestate == MAINMENU then
+    MainMenu.gamepadInput(button)
+  elseif gamestate == GAMEOVER then
+    gamestate = MAINMENU
+    game = nil
+  end
+end
+
+function love.keypressed(key)
+  if gamestate == MAINMENU then
+    MainMenu.keyboardInput(key)
+  elseif gamestate == GAMEOVER then
+    gamestate = MAINMENU
+    game = nil
+  end
+end
+
+--
+-- Drawing
+--
 function love.draw()
-  game.level:render(game.camera)
-  game.player:render(game.camera)
+  if gamestate ~= MAINMENU then
+    game.level:render(game.camera)
+    game.player:render(game.camera)
   
-  ui.render(game)
+    ui.render(game)
+  end
   
-  if gamestate == GAMESTATE_GAMEOVER then
+  if gamestate == GAMEOVER then
     renderGameOver()
+  end
+  
+  if gamestate == MAINMENU then
+    MainMenu.render()
   end
 end
 
@@ -110,4 +149,16 @@ function renderGameOver()
   
   ui.drawString(250, 110, 'Game Over!')
   ui.drawString(250, 130, 'Score: ' .. game.score)
+  
+  if gameoverDelay <= 0 then
+    ui.drawString(250, 170, 'Press any key')
+  end
+end
+
+--
+-- Gamestates
+--
+function triggerGameOver()
+  gamestate = GAMEOVER
+  gameoverDelay = 2
 end
