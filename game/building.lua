@@ -13,7 +13,6 @@ buildingGfx = {}
 
 function initBuildingGfx()
   buildingGfx.image = gfx.tilesImage
-  -- 1, 55
   buildingGfx.quads = {}
   
   local frames = { 1, 19, 37, 55 }
@@ -28,7 +27,6 @@ function Building.create()
 	
   self.currentState = 1
   self.health = 40
-  self.lastDamageTick = 0
   
 	return self
 end

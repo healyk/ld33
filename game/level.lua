@@ -30,8 +30,7 @@ function Level.create(rng, width, height)
     local x = rng:random(12, self.width - 10)
     local y = rng:random(12, self.height - 12)
     
-    self.tiles[x][y].building = Building.create()
-    self.tiles[x][y].name = 'destroyedBuilding'
+    Level:genCity(self, rng, x, y)
   end
   
   return self
@@ -184,5 +183,22 @@ function landTile(value)
     return {
       name = 'grass'
     }
+  end
+end
+
+function Level:genCity(self, rng, x, y)
+  for cityX = 0, 4 do
+    for cityY = 0, 4 do
+      local currentName = self.tiles[x + cityX][x + cityY].name
+      
+      if currentName ~= 'shallowWater' or currentName ~= 'deepWater' or currentName ~= 'sand' then
+        if cityX == 0 or cityY == 0 or cityX == 4 or cityY == 4 then
+          self.tiles[x + cityX][y + cityY].name = 'road'
+        else
+          self.tiles[x + cityX][y + cityY].building = Building.create()
+          self.tiles[x + cityX][y + cityY].name = 'destroyedBuilding'
+        end
+      end
+    end
   end
 end

@@ -5,7 +5,14 @@ Game.__index = Game
 function Game.create()
   local self = setmetatable({}, Game)
   
-  self.rng = love.math.newRandomGenerator()
+  local stime = love.timer.getTime()
+  self.rng = love.math.newRandomGenerator(stime)
+  
+  -- Prime the rng
+  for i = 0, 100 do
+    self.rng:random()
+  end
+  
   self.level = Level.create(self.rng, 100, 100)
   self.camera = Camera.create()
   
