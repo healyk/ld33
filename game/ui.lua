@@ -32,7 +32,7 @@ function ui.drawString(x, y, str)
   for i = 1, string.len(str) do
     local chr = string.byte(str, i)
     local quad = ui.font[chr]
-    print(chr, quad)
+
     love.graphics.draw(ui.image, quad, x + (i * 10 * SCALE_X), y, 0, SCALE_X, SCALE_Y)
   end
 end

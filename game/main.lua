@@ -1,15 +1,18 @@
 require('gfx')
+require('building')
 require('level')
 require('camera')
 require('player')
 require('game')
 require('ui')
 
+debugmode = true
 game = nil
 
 function love.load()
   gfx.init()
   ui.init()
+  initBuildingGfx()
   game = Game.create()
 end
 
@@ -80,5 +83,16 @@ end
 function love.draw()
   game.level:render(game.camera)
   game.player:render(game.camera)
+  
   ui.render(game)
+  
+  if debugmode then
+    local bounds = game.player:getBounds()
+    local pixelX = (bounds.x - (bounds.x % TILE_WIDTH)) - game.camera.x
+    local pixelY = (bounds.y - (bounds.y % TILE_HEIGHT)) - game.camera.y + TILE_HEIGHT
+    
+    love.graphics.setColor(255, 0, 0, 255)
+    love.graphics.rectangle("line", pixelX * SCALE_X, pixelY * SCALE_Y, bounds.width * SCALE_X, bounds.height * SCALE_Y)
+    love.graphics.setColor(255, 255, 255, 255)
+  end
 end

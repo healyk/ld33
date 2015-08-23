@@ -25,6 +25,15 @@ function Level.create(rng, width, height)
     end
   end
   
+  -- Add some random buildings
+  for i = 0, 10 do
+    local x = rng:random(12, self.width - 10)
+    local y = rng:random(12, self.height - 12)
+    
+    self.tiles[x][y].building = Building.create()
+    self.tiles[x][y].name = 'destroyedBuilding'
+  end
+  
   return self
 end
 
@@ -53,6 +62,8 @@ function Level:render(camera)
   -- pad y
   local width, height = camera:getScreenTileResolution()
   cameraTileY = cameraTileY - math.floor(width / 4)
+  
+  local buildings = {}
 
   for y = -10, self.height do
     for x = -10, self.width do
@@ -65,27 +76,43 @@ function Level:render(camera)
       end
       
       gfx.drawTile(gfx.tiles[tile.name], pixelX, pixelY / 2)
+      
+      if tile.building ~= nil then
+        table.insert(buildings, { tile.building, pixelX, pixelY })
+      end
     end
+  end
+  
+  -- Second sweep for buildings
+  for index, data in pairs(buildings) do
+    local building = data[1]
+    building:render(data[2], data[3] / 2)
   end
 end
 
 function Level:destroyTile(x, y)
   if self:inBounds(x, y) then
     tile = self.tiles[x][y]
-
-    if tileDestroyable(tile.name) then
+    
+    if tile.building ~= nil then
+      if tile.building:damage() then
+        tile.building = nil
+      end
+      
+      return 10
+    elseif tileDestroyable(tile.name) then
       tile.name = "destroyed"
-      return true
+      return 1
     else
-      return false
+      return 0
     end
   else
-    return false
+    return 0
   end
 end
 
 function tileDestroyable(name)
-  return name ~= 'destroyed' and name ~= 'shallowWater' and name ~= 'deepWater'
+  return name ~= 'destroyed' and name ~= 'shallowWater' and name ~= 'deepWater' and name ~= 'destroyedBuilding'
 end
 
 function tileEnterable(name)

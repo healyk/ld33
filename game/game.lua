@@ -13,6 +13,7 @@ function Game.create()
   self.camera:setCenter(5, 5)
   
   self.score = 0
+  self.damaging = false
   
   return self
 end
@@ -20,23 +21,24 @@ end
 function Game:moveBy(x, y)
   self.player:moveBy(x, y)
   self.camera:setCenter(self.player.x, self.player.y)
+  self.damaging = true
 end
 
 function Game:calculatePlayerTouchTiles()
   local bounds = self.player:getBounds()
   
-  local left = bounds.x - (bounds.x % TILE_WIDTH)
+  local left = bounds.x -- (bounds.x % TILE_WIDTH)
   local right = bounds.x + bounds.width
-  right = right + (right % TILE_WIDTH)
+  --right = right + (right % TILE_WIDTH)
 
-  local top = bounds.y - (bounds.y % TILE_HEIGHT)
+  local top = bounds.y -- (bounds.y % TILE_HEIGHT)
   local bottom = bounds.y + bounds.height
-  bottom = bottom + (bottom % TILE_HEIGHT)
+  --bottom = bottom + (bottom % TILE_HEIGHT)
   
   results = {}
   for x = left, right, TILE_WIDTH do
     for y = top, bottom, TILE_HEIGHT do
-      table.insert(results, { x / TILE_WIDTH, y / TILE_HEIGHT })
+      table.insert(results, { math.floor(x / TILE_WIDTH), math.floor(y / TILE_HEIGHT) })
     end
   end
   
@@ -44,17 +46,15 @@ function Game:calculatePlayerTouchTiles()
 end
 
 function Game:updateScore()
-  local tiles = game:calculatePlayerTouchTiles()
-  local oldScore = self.score
+  if self.damaging then
+    local tiles = game:calculatePlayerTouchTiles()
+    local oldScore = self.score
   
-  for k, v in pairs(tiles) do
-    if game.level:destroyTile(v[1], v[2]) then
-      self.score = self.score + 1
+    for k, v in pairs(tiles) do
+      self.score = self.score + game.level:destroyTile(v[1], v[2])
     end
-  end
-  
-  if oldScore ~= self.score then
-    print("New score: " .. self.score)
+    
+    self.damaging = false
   end
 end
 

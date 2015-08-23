@@ -9,18 +9,19 @@ TILE_WIDTH = 16
 TILE_HEIGHT = 16
 
 function gfx.init()
-  love.graphics.setDefaultFilter("nearest", "nearest", 1)
+  love.graphics.setDefaultFilter('nearest', 'nearest', 1)
   
   gfx.tiles = {}
   gfx.tilesImage = love.graphics.newImage('tiles.png')
   
-  gfx.addTile("grass", 1, 1)
-  gfx.addTile("shallowWater", 19, 1)
-  gfx.addTile("deepWater", 37, 1)
-  gfx.addTile("road", 55, 1)
-  gfx.addTile("dirt", 73, 1)
-  gfx.addTile("destroyed", 91, 1)
-  gfx.addTile("sand", 109, 1)
+  gfx.addTile('grass', 1, 1)
+  gfx.addTile('shallowWater', 19, 1)
+  gfx.addTile('deepWater', 37, 1)
+  gfx.addTile('road', 55, 1)
+  gfx.addTile('dirt', 73, 1)
+  gfx.addTile('destroyed', 91, 1)
+  gfx.addTile('sand', 109, 1)
+  gfx.addTile('destroyedBuilding', 127, 1)
 end
 
 function gfx.addTile(name, x, y)
