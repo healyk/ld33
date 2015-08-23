@@ -9,6 +9,7 @@ require('ui')
 MAINMENU = 0
 INGAME = 1
 GAMEOVER = 2
+HELP1 = 3
 
 game = nil
 gamestate = MAINMENU
@@ -107,6 +108,8 @@ function love.gamepadpressed(joystick, button)
   elseif gamestate == GAMEOVER then
     gamestate = MAINMENU
     game = nil
+  elseif gamestate == HELP1 then
+    gamestate = MAINMENU
   end
 end
 
@@ -116,6 +119,8 @@ function love.keypressed(key)
   elseif gamestate == GAMEOVER then
     gamestate = MAINMENU
     game = nil
+   elseif gamestate == HELP1 then
+    gamestate = MAINMENU
   end
 end
 
@@ -123,7 +128,7 @@ end
 -- Drawing
 --
 function love.draw()
-  if gamestate ~= MAINMENU then
+  if gamestate == INGAME or gamestate == GAMEOVER then
     game.level:render(game.camera)
     game.player:render(game.camera)
   
@@ -136,6 +141,10 @@ function love.draw()
   
   if gamestate == MAINMENU then
     MainMenu.render()
+  end
+  
+  if gamestate == HELP1 then
+    love.graphics.draw(gfx.help1, 0, 0, 0, SCALE_X, SCALE_Y)
   end
 end
 

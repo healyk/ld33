@@ -76,13 +76,14 @@ end
 --
 MainMenu = MainMenu or {
   selected = 1,
-  items = { "PLAY GAME", "EXIT" },
+  items = { "PLAY GAME", "INSTRUCTIONS", "EXIT" },
   soundChange = love.audio.newSource("menu-change.wav", "static"),
   soundSelect = love.audio.newSource("menu-select.wav", "static")
 }
 
 NEW_GAME = 1
-EXIT = 2
+INSTRUCTIONS = 2
+EXIT = 3
 
 function MainMenu.reset()
   MainMenu.selected = 1
@@ -104,6 +105,8 @@ function MainMenu.select()
     game = Game.create()
     gamestate = INGAME
     MainMenu.soundSelect:play()
+  elseif MainMenu.selected == INSTRUCTIONS then
+    gamestate = HELP1
   elseif MainMenu.selected == EXIT then
     love.event.quit()
   end
@@ -127,9 +130,9 @@ end
 
 function MainMenu.gamepadInput(button)
   if button == 'dpdown' then
-    MainMenu.changeSelected(-1)
-  elseif button == 'dpup' then
     MainMenu.changeSelected(1)
+  elseif button == 'dpup' then
+    MainMenu.changeSelected(-1)
   else
     for k, v in pairs({ 'a', 'b', 'x', 'y', 'back', 'guide', 'start' }) do
       if button == v then
@@ -141,9 +144,9 @@ end
 
 function MainMenu.keyboardInput(button)
   if button == 'down' then
-    MainMenu.changeSelected(-1)
-  elseif button == 'up' then
     MainMenu.changeSelected(1)
+  elseif button == 'up' then
+    MainMenu.changeSelected(-1)
   elseif button == 'return' or button == ' ' or button == 'space' then
     MainMenu.select()
   end

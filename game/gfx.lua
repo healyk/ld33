@@ -24,6 +24,10 @@ function gfx.init()
   gfx.addTile('destroyedSkyscraper', 127, 1)
   gfx.addTile('destroyedHouse', 145, 1)
   gfx.addTile('field', 163, 1)
+  
+  gfx.help1 = love.graphics.newImage('help1.png')
+  
+  love.graphics.setBackgroundColor(20, 12, 28)
 end
 
 function gfx.addTile(name, x, y)
