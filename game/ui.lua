@@ -21,6 +21,8 @@ function ui.init()
   ui.addChar(':', 1, 25)
   ui.addChar('!', 13, 25)
   ui.addChar('>', 25, 25)
+  
+  ui.logoQuad = love.graphics.newQuad(0, 432, 125, 80, ui.image:getWidth(), ui.image:getHeight())
 end
 
 function ui.addChar(chr, x, y)
@@ -37,7 +39,7 @@ function ui.render(game)
   love.graphics.rectangle("fill", 0, 0, width, 50)
   love.graphics.setColor(255, 255, 255, 255)
   
-  ui.drawString(4, 0, 'SCORE: ' .. game.score)
+  ui.drawString(4, 7, 'SCORE: ' .. game.score)
   
   ui.renderTime(game)
 end
@@ -50,7 +52,7 @@ function ui.renderTime(game)
     seconds = '0' .. seconds
   end
   
-  ui.drawString(300, 0, 'TIME ' .. minutes .. ':' .. seconds)
+  ui.drawString(300, 7, 'TIME ' .. minutes .. ':' .. seconds)
 end
 
 function ui.drawString(x, y, str)
@@ -113,7 +115,7 @@ function MainMenu.select()
 end
 
 function MainMenu.render()
-  local x = 100
+  love.graphics.draw(ui.image, ui.logoQuad, 262, 50, 0, SCALE_X, SCALE_Y)
  
   for i = 1, #MainMenu.items do
     local itemStr = MainMenu.items[i]
