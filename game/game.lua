@@ -77,31 +77,33 @@ function appendScore(filename, score)
 end
 
 function Game:saveHighScore()
-  local filename = 'highscore.txt'
+  -- Disabled for now
+
+  -- local filename = 'highscore.txt'
   
-  if not love.filesystem.exists(filename) then
-    print(filename)
-    file = love.filesystem.newFile(filename)
-    appendScore(filename, self.score)
-  else
-    local contents, size = love.filesystem.read(filename)
-    local scores = {}
+  -- if not love.filesystem.exists(filename) then
+    -- print(filename)
+    -- file = love.filesystem.newFile(filename)
+    -- appendScore(filename, self.score)
+  -- else
+    -- local contents, size = love.filesystem.read(filename)
+    -- local scores = {}
     
-    for score in contents:gmatch("%d+") do
-      table.insert(scores, score)
-    end 
+    -- for score in contents:gmatch("%d+") do
+      -- table.insert(scores, score)
+    -- end 
     
-    table.insert(scores, self.score)
-    table.sort(scores)
+    -- table.insert(scores, self.score)
+    -- table.sort(scores)
     
-    -- Clear the file
-    love.filesystem.write(filename, '', 0)
-    for k, v in pairs(scores) do
-      if k <= 10 then
-        appendScore(filename, scores[i])
-      end
-    end
-  end
+    -- -- Clear the file
+    -- love.filesystem.write(filename, '', 0)
+    -- for k, v in pairs(scores) do
+      -- if k <= 10 then
+        -- appendScore(filename, scores[i])
+      -- end
+    -- end
+  -- end
 end
 
 function Game:update(dt)
