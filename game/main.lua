@@ -168,6 +168,7 @@ end
 -- Gamestates
 --
 function triggerGameOver()
+  game:saveHighScore()
   gamestate = GAMEOVER
   gameoverDelay = 2
 end

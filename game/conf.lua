@@ -3,5 +3,5 @@ function love.conf(t)
 
   t.console = true
   t.window.title = 'Ant Destroyer'
-  t.identity = 'AndDestroyer'
+  t.identity = 'AntDestroyer'
 end
